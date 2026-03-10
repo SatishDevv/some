@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>For My Love ❤️</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+/* animated name */
+
+@keyframes glow{
+0%{text-shadow:0 0 10px #fff,0 0 20px #ff4d6d}
+100%{text-shadow:0 0 25px #fff,0 0 50px #ff1744}
+}
+
+.glow{
+animation:glow 2s infinite alternate
+}
+
+/* star sky */
+
+.star{
+position:absolute;
+background:white;
+border-radius:50%;
+animation:twinkle 3s infinite ease-in-out
+}
+
+@keyframes twinkle{
+0%,100%{opacity:.3}
+50%{opacity:1}
+}
+
+/* heart rain */
+
+.heart{
+position:absolute;
+animation:rain linear infinite
+}
+
+@keyframes rain{
+0%{transform:translateY(-10vh)}
+100%{transform:translateY(110vh)}
+}
+
+/* explosion */
+
+.explode{
+position:absolute;
+font-size:28px;
+animation:explode 2s forwards
+}
+
+@keyframes explode{
+0%{transform:scale(1);opacity:1}
+100%{transform:translateY(-200px) scale(2);opacity:0}
+}
+
+</style>
+
+</head>
+
+<body class="bg-black text-white min-h-screen flex items-center justify-center overflow-hidden">
+
+<!-- ⭐ stars -->
+
+<script>
+
+for(let i=0;i<120;i++){
+
+let star=document.createElement("div")
+
+star.className="star"
+
+star.style.width=Math.random()*3+"px"
+star.style.height=Math.random()*3+"px"
+
+star.style.top=Math.random()*100+"vh"
+star.style.left=Math.random()*100+"vw"
+
+document.body.appendChild(star)
+
+}
+
+</script>
+
+<!-- ❤️ heart rain -->
+
+<script>
+
+for(let i=0;i<30;i++){
+
+let heart=document.createElement("div")
+
+heart.className="heart text-pink-400 text-xl"
+
+heart.innerHTML="❤️"
+
+heart.style.left=Math.random()*100+"vw"
+
+heart.style.animationDuration=(5+Math.random()*6)+"s"
+
+document.body.appendChild(heart)
+
+}
+
+</script>
+
+<!-- main content -->
+
+<div class="relative z-10 text-center max-w-xl px-6 py-10">
+
+<h1 class="text-3xl md:text-4xl font-bold mb-4">
+❤️ For My Beautiful Love ❤️
+</h1>
+
+<h2 class="text-5xl md:text-6xl font-bold glow mb-6">
+Priya
+</h2>
+
+<p class="text-lg md:text-xl mb-6">
+You make my world brighter every single day 💕
+</p>
+
+<button onclick="explodeHearts()" class="bg-white text-pink-600 px-6 py-3 rounded-full font-semibold hover:bg-pink-200 transition">
+Click For Love 💘
+</button>
+
+<!-- love letter -->
+
+<div class="mt-10 bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl">
+
+<h3 class="text-2xl font-semibold mb-4">
+💌 Love Letter
+</h3>
+
+<p class="text-base md:text-lg leading-relaxed">
+
+My love ❤️
+
+Every moment with you feels magical.
+
+You are my happiness, my peace, and my biggest blessing.
+
+No matter where life takes us, I promise to always stand by you and love you more every day.
+
+You are my best friend and my forever 💖
+
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+function explodeHearts(){
+
+for(let i=0;i<40;i++){
+
+let heart=document.createElement("div")
+
+heart.className="explode"
+
+heart.innerHTML="❤️"
+
+heart.style.left=Math.random()*100+"vw"
+heart.style.top=Math.random()*100+"vh"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>{
+
+heart.remove()
+
+},2000)
+
+}
+
+}
+
+</script>
+
+<!-- 🎵 romantic background music -->
+
+<audio autoplay loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3e0c9e12b3.mp3?filename=romantic-piano-110397.mp3" type="audio/mp3">
+</audio>
+
+</body>
+</html>
