@@ -5,13 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>For My Love ❤️</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-pink-100 min-h-screen flex flex-col items-center justify-center p-4">
 
-  <!-- Card -->
-  <div class="bg-white shadow-2xl rounded-2xl p-6 max-w-md text-center mb-6">
+  <style>
+    /* Floating Hearts */
+    .heart {
+      position: fixed;
+      bottom: -10px;
+      font-size: 20px;
+      animation: floatUp 5s linear infinite;
+      color: pink;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body id="body" class="bg-pink-100 min-h-screen flex flex-col items-center justify-center">
+
+  <!-- Main Card -->
+  <div class="bg-white shadow-2xl rounded-2xl p-6 max-w-md text-center">
     
-    <img src="https://via.placeholder.com/150" 
+    <img src="src/photo1.jpg" 
          class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-pink-300">
 
     <h1 class="text-3xl font-bold text-pink-500 mb-2">
@@ -19,17 +42,13 @@
     </h1>
 
     <p class="text-gray-700 mb-4">
-      Every moment with you is special. You are my happiness 💖
+      You are my happiness 💖
     </p>
 
-    <button onclick="showMessage()" 
+    <button onclick="showPopup()" 
       class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full">
-      Click Me 💌
+      Open Surprise 🎁
     </button>
-
-    <p id="secret" class="hidden mt-4 text-pink-600 font-semibold">
-      I love you more than words can say ❤️✨
-    </p>
 
     <button onclick="toggleMusic()" 
       class="mt-4 text-sm text-pink-500 underline">
@@ -37,44 +56,95 @@
     </button>
   </div>
 
-  <!-- Photo Gallery -->
-  <div class="max-w-4xl w-full">
-    <h2 class="text-2xl font-bold text-pink-600 text-center mb-4">
-      Our Beautiful Memories 📸
-    </h2>
+  <!-- POPUP -->
+  <div id="popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-8 rounded-2xl text-center shadow-xl relative">
+      
+      <h2 class="text-2xl font-bold text-pink-500 mb-4">
+        Will You Be Mine? 💖
+      </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <img src="https://via.placeholder.com/300" class="rounded-xl shadow-md hover:scale-105 transition">
-      <img src="https://via.placeholder.com/301" class="rounded-xl shadow-md hover:scale-105 transition">
-      <img src="https://via.placeholder.com/302" class="rounded-xl shadow-md hover:scale-105 transition">
-      <img src="https://via.placeholder.com/303" class="rounded-xl shadow-md hover:scale-105 transition">
-      <img src="https://via.placeholder.com/304" class="rounded-xl shadow-md hover:scale-105 transition">
-      <img src="https://via.placeholder.com/305" class="rounded-xl shadow-md hover:scale-105 transition">
+      <div class="flex justify-center gap-4">
+        <button onclick="yesClicked()" 
+          class="bg-green-500 text-white px-4 py-2 rounded-full">
+          Yes 💕
+        </button>
+
+        <button id="noBtn" 
+          onmouseover="moveNo()" 
+          class="bg-red-500 text-white px-4 py-2 rounded-full absolute">
+          No 😢
+        </button>
+      </div>
+
+      <p id="response" class="mt-6 text-pink-600 font-semibold"></p>
     </div>
   </div>
 
   <!-- Background Music -->
-  <audio id="bgMusic" autoplay loop>
-    <source src="https://archive.org/download/FreebeatRomanticprod.BySkellonViaInstrumentals.com.ng/Freebeat-Romanticprod.-by-skellon%20via%20instrumentals.com.ng.MP3" type="audio/mpeg">
+  <audio id="bgMusic" loop>
+    <source src="src/music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- YES Sound -->
+  <audio id="yesSound">
+    <source src="src/yes.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    function showMessage() {
-      document.getElementById('secret').classList.remove('hidden');
+    function showPopup() {
+      document.getElementById("popup").classList.remove("hidden");
+    }
+
+    function yesClicked() {
+      document.getElementById("yesSound").play();
+
+      document.getElementById("response").innerText =
+        "Yay!!! I love you sooo much ❤️😍";
+
+      startHearts();
+
+      setTimeout(() => {
+        document.getElementById("popup").classList.add("hidden");
+      }, 2500);
+    }
+
+    function moveNo() {
+      const btn = document.getElementById("noBtn");
+      const x = Math.random() * 300;
+      const y = Math.random() * 200;
+
+      btn.style.left = x + "px";
+      btn.style.top = y + "px";
     }
 
     function toggleMusic() {
-      const music = document.getElementById('bgMusic');
-      if (music.paused) {
-        music.play();
-      } else {
-        music.pause();
-      }
+      const music = document.getElementById("bgMusic");
+      if (music.paused) music.play();
+      else music.pause();
     }
 
+    // Floating hearts generator
+    function startHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤️";
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 5000);
+      }, 200);
+    }
+
+    // Start music on first click
     window.addEventListener('click', () => {
-      const music = document.getElementById('bgMusic');
-      music.play().catch(() => {});
+      document.getElementById('bgMusic').play().catch(()=>{});
     }, { once: true });
   </script>
 
