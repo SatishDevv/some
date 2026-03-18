@@ -1,152 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>For My Love ❤️</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Love Memories ❤️</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body {
+    background: radial-gradient(circle, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  @keyframes gradientBG {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
-  <style>
-    /* Floating Hearts */
-    .heart {
-      position: fixed;
-      bottom: -10px;
-      font-size: 20px;
-      animation: floatUp 5s linear infinite;
-      color: pink;
-    }
+  .slider-container {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255,105,180,0.6);
+    margin-bottom: 1rem;
+  }
+  .slider-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+  .slider-slide.active { opacity: 1; }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) scale(1.5);
-        opacity: 0;
-      }
-    }
-  </style>
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,105,180,0.8);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size: 24px;
+    z-index: 10;
+  }
+  .slider-btn.left { left: 10px; }
+  .slider-btn.right { right: 10px; }
+
+  .message {
+    text-align:center;
+    font-size:1.2rem;
+    color:#ff1a75;
+    margin-bottom:2rem;
+    min-height:2.5rem;
+    background: rgba(255,255,255,0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255,105,180,0.4);
+    animation: fadeIn 1s ease;
+  }
+  @keyframes fadeIn {0%{opacity:0; transform: translateY(10px);}100%{opacity:1; transform:translateY(0);}}
+
+  .heart { position: fixed; bottom:-10px; animation: floatUp linear forwards; color: pink; font-size: 20px; }
+  @keyframes floatUp {0%{transform: translateY(0); opacity:1;}100%{transform: translateY(-100vh) scale(1.5); opacity:0;}}
+
+  .popup-msg { font-family: 'Brush Script MT', cursive; font-size:1.5rem; color:#ff1493; }
+</style>
 </head>
+<body>
 
-<body id="body" class="bg-pink-100 min-h-screen flex flex-col items-center justify-center">
+<h1 class="text-4xl font-bold text-pink-600 mb-4">Our Love Memories ❤️</h1>
 
-  <!-- Main Card -->
-  <div class="bg-white shadow-2xl rounded-2xl p-6 max-w-md text-center">
-    
-    <img src="src/photo1.jpg" 
-         class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-pink-300">
+<div class="slider-container" id="slider">
+  <div class="slider-btn left" onclick="prevSlide()">‹</div>
+  <div class="slider-btn right" onclick="nextSlide()">›</div>
+</div>
 
-    <h1 class="text-3xl font-bold text-pink-500 mb-2">
-      Hi My Love 💕
-    </h1>
+<div class="message" id="slideMessage"></div>
 
-    <p class="text-gray-700 mb-4">
-      You are my happiness 💖
-    </p>
+<!-- Surprise button -->
+<button onclick="showPopup()" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full mb-6">Open Surprise 🎁</button>
 
-    <button onclick="showPopup()" 
-      class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full">
-      Open Surprise 🎁
-    </button>
-
-    <button onclick="toggleMusic()" 
-      class="mt-4 text-sm text-pink-500 underline">
-      Play / Pause Music 🎵
-    </button>
-  </div>
-
-  <!-- POPUP -->
-  <div id="popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-8 rounded-2xl text-center shadow-xl relative">
-      
-      <h2 class="text-2xl font-bold text-pink-500 mb-4">
-        Will You Be Mine? 💖
-      </h2>
-
-      <div class="flex justify-center gap-4">
-        <button onclick="yesClicked()" 
-          class="bg-green-500 text-white px-4 py-2 rounded-full">
-          Yes 💕
-        </button>
-
-        <button id="noBtn" 
-          onmouseover="moveNo()" 
-          class="bg-red-500 text-white px-4 py-2 rounded-full absolute">
-          No 😢
-        </button>
-      </div>
-
-      <p id="response" class="mt-6 text-pink-600 font-semibold"></p>
+<!-- Popup -->
+<div id="popup" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-20">
+  <div class="bg-white p-8 rounded-2xl text-center shadow-xl relative">
+    <h2 class="text-2xl font-bold text-pink-500 mb-4 popup-msg">Will You Be Mine, Emma? 💖</h2>
+    <div class="flex justify-center gap-4 relative h-12">
+      <button onclick="showHearts()" class="bg-green-500 text-white px-4 py-2 rounded-full">Yes 💕</button>
+      <button id="noBtn" onmouseover="moveNo()" class="bg-red-500 text-white px-4 py-2 rounded-full absolute">No 😢</button>
     </div>
+    <p id="response" class="mt-4 text-pink-600 font-semibold popup-msg"></p>
   </div>
+</div>
 
-  <!-- Background Music -->
-  <audio id="bgMusic" loop>
-    <source src="src/music.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bgMusic" loop><source src="src/music.mp3" type="audio/mpeg"></audio>
+<audio id="yesSound"><source src="src/yes.mp3" type="audio/mpeg"></audio>
 
-  <!-- YES Sound -->
-  <audio id="yesSound">
-    <source src="src/yes.mp3" type="audio/mpeg">
-  </audio>
+<script>
+  const gfName = "Emma"; 
 
-  <script>
-    function showPopup() {
-      document.getElementById("popup").classList.remove("hidden");
-    }
+  const slides = [
+    {src:'src/one.jpeg', msg:`The first time I saw you, ${gfName}, I knew something special 💖`},
+    {src:'src/two.jpeg', msg:`This smile, ${gfName}, melts my heart every time 😍`},
+    {src:'src/three.jpeg', msg:`Laughing together always makes me happier with you 💕`},
+    {src:'src/four.jpeg', msg:`Every moment with you is precious, ${gfName} 🌸`},
+    {src:'src/fift.jpeg', msg:`Sweet memories that I will cherish forever 💗`},
+    {src:'src/six.jpeg', msg:`Our little adventures, just us two 🌙`},
+    {src:'src/seven.jpeg', msg:`Romantic evenings with you are magical ❤️`},
+    {src:'src/aight.jpeg', msg:`Every day feels brighter with you, ${gfName} 🌹`},
+    {src:'src/nine.jpeg', msg:`Always smiling, always loving you 😘`},
+    {src:'src/ten.jpeg', msg:`Forever together, hand in hand 💑`},
+    {src:'src/12.jpeg', msg:`I love you endlessly, ${gfName} 💗`},
+    {src:'src/13.jpeg', msg:`Beautiful moments, just you & me 🌟`},
+    {src:'src/14.jpeg', msg:`My happiest days are with you 💖`},
+    {src:'src/15.jpeg', msg:`You & Me, together always ❤️`},
+    {src:'src/16.jpeg', msg:`Every memory I make is sweeter with you 💕`}
+  ];
 
-    function yesClicked() {
-      document.getElementById("yesSound").play();
+  const sliderContainer = document.getElementById('slider');
+  const slideMessage = document.getElementById('slideMessage');
+  let currentSlide = 0;
 
-      document.getElementById("response").innerText =
-        "Yay!!! I love you sooo much ❤️😍";
+  slides.forEach((slide,i)=>{
+    const img=document.createElement('img');
+    img.src = slide.src;
+    img.className = 'slider-slide';
+    if(i===0) img.classList.add('active');
+    sliderContainer.appendChild(img);
+  });
 
-      startHearts();
+  const slideElems = document.querySelectorAll('.slider-slide');
 
-      setTimeout(() => {
-        document.getElementById("popup").classList.add("hidden");
-      }, 2500);
-    }
+  function showSlide(index){
+    slideElems.forEach((s,i)=>s.classList.toggle('active', i===index));
+    slideMessage.innerText = slides[index].msg;
+  }
 
-    function moveNo() {
-      const btn = document.getElementById("noBtn");
-      const x = Math.random() * 300;
-      const y = Math.random() * 200;
+  function nextSlide(){
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
 
-      btn.style.left = x + "px";
-      btn.style.top = y + "px";
-    }
+  function prevSlide(){
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  }
 
-    function toggleMusic() {
-      const music = document.getElementById("bgMusic");
-      if (music.paused) music.play();
-      else music.pause();
-    }
+  // Swipe support
+  let startX=0;
+  sliderContainer.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; });
+  sliderContainer.addEventListener('touchend', e=>{
+    const diff = e.changedTouches[0].clientX - startX;
+    if(diff>50) prevSlide();
+    else if(diff<-50) nextSlide();
+  });
 
-    // Floating hearts generator
-    function startHearts() {
-      setInterval(() => {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤️";
+  // Hearts popup
+  function showPopup(){ document.getElementById('popup').classList.remove('hidden'); }
+  function showHearts(){
+    document.getElementById('popup').classList.add('hidden');
+    document.getElementById('yesSound').play();
+    startHearts();
+    document.getElementById('response').innerText = `I LOVE YOU SO MUCH ❤️😍, ${gfName}!`;
+  }
 
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-
+  function startHearts(){
+    for(let i=0;i<50;i++){
+      setTimeout(()=>{
+        const heart=document.createElement('div');
+        heart.className='heart';
+        heart.innerText='❤️';
+        heart.style.left=Math.random()*100+'vw';
+        heart.style.fontSize=(Math.random()*20+10)+'px';
+        heart.style.animationDuration=(Math.random()*2+3)+'s';
         document.body.appendChild(heart);
-
-        setTimeout(() => {
-          heart.remove();
-        }, 5000);
-      }, 200);
+        setTimeout(()=>heart.remove(),5000);
+      },i*100);
     }
+  }
 
-    // Start music on first click
-    window.addEventListener('click', () => {
-      document.getElementById('bgMusic').play().catch(()=>{});
-    }, { once: true });
-  </script>
+  // NO button escapes
+  function moveNo(){
+    const btn = document.getElementById('noBtn');
+    const parent = btn.parentElement;
+    const rect = parent.getBoundingClientRect();
+    const maxX = rect.width - btn.offsetWidth;
+    const maxY = rect.height - btn.offsetHeight;
+    btn.style.position = "absolute";
+    btn.style.left = Math.random()*maxX + "px";
+    btn.style.top = Math.random()*maxY + "px";
+  }
+
+  // Music autoplay
+  window.addEventListener('click',()=>{document.getElementById('bgMusic').play().catch(()=>{});},{once:true});
+
+  showSlide(currentSlide); // initialize first slide
+</script>
 
 </body>
 </html>
