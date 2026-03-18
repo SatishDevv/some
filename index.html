@@ -16,18 +16,18 @@
     align-items: center;
     padding: 2rem;
     overflow-x: hidden;
-    font-family: 'Segoe UI', sans-serif;
   }
   @keyframes gradientBG {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
+  /* Slider */
   .slider-container {
     position: relative;
     width: 90%;
-    max-width: 600px;
-    height: 400px;
+    max-width: 700px;
+    height: 600px;
     overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 25px rgba(255,105,180,0.6);
+    border-radius: 25px;
+    box-shadow: 0 0 35px rgba(255,105,180,0.6);
     margin-bottom: 1rem;
   }
   .slider-slide {
@@ -35,49 +35,49 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 0.7s ease;
+    transition: opacity 0.7s ease, transform 0.7s ease;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 25px;
   }
-  .slider-slide.active { opacity: 1; }
-
+  .slider-slide.active { opacity: 1; transform: scale(1); }
   .slider-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     background: rgba(255,105,180,0.8);
     color: white;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display:flex;
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    font-size: 24px;
+    font-size: 28px;
     z-index: 10;
   }
   .slider-btn.left { left: 10px; }
   .slider-btn.right { right: 10px; }
-
   .message {
     text-align:center;
-    font-size:1.2rem;
+    font-size:1.3rem;
     color:#ff1a75;
     margin-bottom:2rem;
-    min-height:2.5rem;
-    background: rgba(255,255,255,0.7);
-    padding: 0.5rem 1rem;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(255,105,180,0.4);
-    animation: fadeIn 1s ease;
+    min-height:2rem;
   }
-  @keyframes fadeIn {0%{opacity:0; transform: translateY(10px);}100%{opacity:1; transform:translateY(0);}}
 
-  .heart { position: fixed; bottom:-10px; animation: floatUp linear forwards; color: pink; font-size: 20px; }
+  .heart { 
+    position: fixed; 
+    bottom:-10px; 
+    animation: floatUp linear forwards; 
+    color: pink; 
+    font-size: 20px; 
+  }
   @keyframes floatUp {0%{transform: translateY(0); opacity:1;}100%{transform: translateY(-100vh) scale(1.5); opacity:0;}}
 
-  .popup-msg { font-family: 'Brush Script MT', cursive; font-size:1.5rem; color:#ff1493; }
+  /* Responsive slider height */
+  @media (max-width: 768px) { .slider-container { height: 450px; } }
+  @media (max-width: 480px) { .slider-container { height: 300px; } }
 </style>
 </head>
 <body>
@@ -97,37 +97,39 @@
 <!-- Popup -->
 <div id="popup" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-20">
   <div class="bg-white p-8 rounded-2xl text-center shadow-xl relative">
-    <h2 class="text-2xl font-bold text-pink-500 mb-4 popup-msg">Will You Be Mine, Emma? 💖</h2>
+    <h2 class="text-2xl font-bold text-pink-500 mb-4">Will You Be Mine, Emma? 💖</h2>
     <div class="flex justify-center gap-4 relative h-12">
       <button onclick="showHearts()" class="bg-green-500 text-white px-4 py-2 rounded-full">Yes 💕</button>
       <button id="noBtn" onmouseover="moveNo()" class="bg-red-500 text-white px-4 py-2 rounded-full absolute">No 😢</button>
     </div>
-    <p id="response" class="mt-4 text-pink-600 font-semibold popup-msg"></p>
+    <p id="response" class="mt-4 text-pink-600 font-semibold"></p>
   </div>
 </div>
 
+<!-- Audio -->
 <audio id="bgMusic" loop><source src="src/music.mp3" type="audio/mpeg"></audio>
 <audio id="yesSound"><source src="src/yes.mp3" type="audio/mpeg"></audio>
 
 <script>
-  const gfName = "Emma"; 
+  const gfName = "Emma"; // personalize here
 
+  // Slider images + romantic/caring messages
   const slides = [
-    {src:'src/one.jpeg', msg:`The first time I saw you, ${gfName}, I knew something special 💖`},
-    {src:'src/two.jpeg', msg:`This smile, ${gfName}, melts my heart every time 😍`},
-    {src:'src/three.jpeg', msg:`Laughing together always makes me happier with you 💕`},
-    {src:'src/four.jpeg', msg:`Every moment with you is precious, ${gfName} 🌸`},
-    {src:'src/fift.jpeg', msg:`Sweet memories that I will cherish forever 💗`},
-    {src:'src/six.jpeg', msg:`Our little adventures, just us two 🌙`},
-    {src:'src/seven.jpeg', msg:`Romantic evenings with you are magical ❤️`},
-    {src:'src/aight.jpeg', msg:`Every day feels brighter with you, ${gfName} 🌹`},
-    {src:'src/nine.jpeg', msg:`Always smiling, always loving you 😘`},
-    {src:'src/ten.jpeg', msg:`Forever together, hand in hand 💑`},
-    {src:'src/12.jpeg', msg:`I love you endlessly, ${gfName} 💗`},
-    {src:'src/13.jpeg', msg:`Beautiful moments, just you & me 🌟`},
-    {src:'src/14.jpeg', msg:`My happiest days are with you 💖`},
-    {src:'src/15.jpeg', msg:`You & Me, together always ❤️`},
-    {src:'src/16.jpeg', msg:`Every memory I make is sweeter with you 💕`}
+    {src:'src/one.jpeg', msg:`First time we met, ${gfName} 😍`},
+    {src:'src/two.jpeg', msg:`Our cute selfie together, ${gfName} 💕`},
+    {src:'src/three.jpeg', msg:`Fun times with you, ${gfName} 🌸`},
+    {src:'src/four.jpeg', msg:`Laughing together, ${gfName} 😂`},
+    {src:'src/fift.jpeg', msg:`Sweet memories, ${gfName} 💖`},
+    {src:'src/six.jpeg', msg:`Weekend adventures with ${gfName} 🌙`},
+    {src:'src/seven.jpeg', msg:`Romantic vibes, ${gfName} ❤️`},
+    {src:'src/aight.jpeg', msg:`Special day with ${gfName} 🌹`},
+    {src:'src/nine.jpeg', msg:`Always smiling together, ${gfName} 😘`},
+    {src:'src/ten.jpeg', msg:`Forever us, ${gfName} 💑`},
+    {src:'src/12.jpeg', msg:`Love you endlessly, ${gfName} 💗`},
+    {src:'src/13.jpeg', msg:`Beautiful moments, ${gfName} 🌟`},
+    {src:'src/14.jpeg', msg:`Happiest day with ${gfName} 💖`},
+    {src:'src/15.jpeg', msg:`You & Me, ${gfName} ❤️`},
+    {src:'src/16.jpeg', msg:`Our journey together, ${gfName} 💕`}
   ];
 
   const sliderContainer = document.getElementById('slider');
@@ -135,7 +137,7 @@
   let currentSlide = 0;
 
   slides.forEach((slide,i)=>{
-    const img=document.createElement('img');
+    const img = document.createElement('img');
     img.src = slide.src;
     img.className = 'slider-slide';
     if(i===0) img.classList.add('active');
@@ -169,7 +171,6 @@
   });
 
   // Hearts popup
-  function showPopup(){ document.getElementById('popup').classList.remove('hidden'); }
   function showHearts(){
     document.getElementById('popup').classList.add('hidden');
     document.getElementById('yesSound').play();
@@ -206,8 +207,6 @@
 
   // Music autoplay
   window.addEventListener('click',()=>{document.getElementById('bgMusic').play().catch(()=>{});},{once:true});
-
-  showSlide(currentSlide); // initialize first slide
 </script>
 
 </body>
